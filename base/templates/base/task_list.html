@@ -1,0 +1,69 @@
+{% extends 'base/main.html' %}
+
+{% block content %}
+
+<div class="header-bar">
+    <div>
+        <h1>Hello {{request.user|title}}</h1>
+        <h3>You have <i>{{count}}</i> incomplete task{{ count|pluralize:"s" }}</h3>
+    </div>
+    <div>
+        {% if request.user.is_authenticated %}
+        <a class="inout" href="{% url 'logout' %}">Logout</a>
+        {% else %}
+        <a class="inout" href="{% url 'login' %}">Login</a>
+        {% endif %}
+    </div>
+</div>
+<!--
+<a href="{% url 'create-task' %}">Add Task</a>
+
+<form method="get">
+    <input type="text" name="search-area", value="{{search_input}}">
+    <input type="submit" value="Search">
+</form>
+-->
+<div class="search-add-wrapper">
+    <form style="display: flex;" action="" method="get">
+        <input class="todo-input" type="text" name="search-area" placeholder="Serach your task" value="{{search_input}}">
+        <input class="todo-btn" type="submit" value="search">
+    </form>
+    <a class="add-link" href="{% url 'create-task' %}">&#x2b;</a>
+</div>
+<div class="task-items-wrapper">
+    {% for task in tasks %}
+    <div class="task-wrapper">
+        <div class="task-title">
+            {% if task.complete %}
+            <div class="task-complete-icon"></div>
+            <i><s><a href="{% url 'update-task' task.id %}">{{task}}</a></s></i>
+            {% else %}
+            <div class="task-incomplete-icon"></div>
+            <a href="{% url 'update-task' task.id %}">{{task}}</a>
+            {% endif %}
+        </div>
+        <div class="task-controls">
+            <a class="delete-link" href="{% url 'delete-task' task.id %}">&#215;</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<!---
+<table>
+    <tr>
+        <th>Item</th>
+        <th></th>
+        <th></th>
+    </tr>
+    {% for task in tasks %}
+    <tr>
+        <td>{{task.title}}</td>
+        <td><a href="{% url 'update-task' task.id %}">Edit</a></td>
+        <td><a href="{% url 'delete-task' task.id %}">Delete</a></td>
+    </tr>
+    {% empty %}
+        <h3>No items in List</h3>
+    {% endfor %}
+</table>-->
+
+{% endblock %}
